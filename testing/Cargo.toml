@@ -4,3 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.3", features = ["html_reports"] }
+
+# Each benchmark needs a `[[bench]]` section with a name and disabling the harness.
+# A name "somename" will correspond with a file "benches/my_benchmark.rs"
+[[bench]]
+name = "my_benchmark"
+harness = false # disables the built-in bencharking functionality
+
+# Criterion documentation:
+# https://bheisler.github.io/criterion.rs/book/getting_started.html#step-2---add-benchmark
