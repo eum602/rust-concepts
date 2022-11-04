@@ -32,7 +32,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = io::stdout();
     terminal::enable_raw_mode()?;
     stdout.execute(EnterAlternateScreen)?; //using alternate screen available on terminals
-    stdout.execute(Hide)?;
+    stdout.execute(Hide)?; // hide cursor
 
     // Render loop in a separate thread
     let (render_tx, render_rx) = mpsc::channel();
@@ -42,7 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         render(&mut stdout, &last_frame, &last_frame, true);
         loop {
             let current_frame = match render_rx.recv() {
-                Ok(x) => x,
+                Ok(x) => x, // if it is a frame return it
                 Err(_) => break,
             };
             render(&mut stdout, &last_frame, &current_frame, false);
@@ -69,16 +69,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
 
         // Draw and render
-        let _ = render_tx.send(curr_frame);
-        thread::sleep(Duration::from_millis(1));
+        let _ = render_tx.send(curr_frame); // silently ignore errors since during startup there won't be child threads to receive the event
+        thread::sleep(Duration::from_millis(1)); //make it slower than the render loop
     }
 
     //cleanup
     drop(render_tx);
     render_handle.join().unwrap();
     audio.wait();
-    stdout.execute(Show)?;
-    stdout.execute(LeaveAlternateScreen)?;
+    stdout.execute(Show)?; // show cursor
+    stdout.execute(LeaveAlternateScreen)?; // leave alternate screen
     terminal::disable_raw_mode()?;
     Ok(())
 }
