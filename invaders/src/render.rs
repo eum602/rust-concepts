@@ -7,7 +7,7 @@ use crate::frame::Frame;
 use crossterm::style::{Color, SetBackgroundColor};
 use crossterm::terminal::{Clear, ClearType};
 
-pub fn render(stdout: &mut Stdout, last_frame: Frame, current_frame: Frame, force: bool) {
+pub fn render(stdout: &mut Stdout, last_frame: &Frame, current_frame: &Frame, force: bool) {
     if force {
         stdout.queue(SetBackgroundColor(Color::Blue)).unwrap();
         stdout.queue(Clear(ClearType::All)).unwrap();
